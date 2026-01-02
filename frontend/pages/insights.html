@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VoltAI | Insights</title>
+  <link rel="stylesheet" href="../styles/theme.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+
+<div class="navbar">
+  <h1>⚡ VoltAI</h1>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="insights.html">Insights</a>
+    <a href="recommendations.html">Recommendations</a>
+    <a href="reports.html">Reports</a>
+  </div>
+</div>
+
+<div class="page">
+  <h2 class="page-title">AI Insights</h2>
+
+  <p style="color: var(--text-muted); margin-bottom:20px">
+    Generated from uploaded energy usage data
+  </p>
+
+  <div class="glass">
+    <ul id="insights"></ul>
+  </div>
+</div>
+
+<script type="module" src="../scripts/insights.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VoltAI | Reports</title>
+  <link rel="stylesheet" href="../styles/theme.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+
+<div class="navbar">
+  <h1>⚡ VoltAI</h1>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="insights.html">Insights</a>
+    <a href="recommendations.html">Recommendations</a>
+    <a href="reports.html">Reports</a>
+  </div>
+</div>
+
+<div class="page">
+  <h2 class="page-title">Download Energy Reports</h2>
+
+  <p style="color: var(--text-muted); max-width:600px;">
+    Download AI-generated reports containing energy usage analysis,
+    insights, and optimization recommendations for future reference.
+  </p>
+
+  <br>
+
+  <div class="grid">
+    <div class="glass">
+      <h3>📊 Energy Summary</h3>
+      <p style="color:var(--text-muted)">
+        Monthly energy usage, predictions, and efficiency score.
+      </p>
+      <br>
+      <button class="btn" onclick="downloadCSV()">Download CSV</button>
+    </div>
+
+    <div class="glass">
+      <h3>📄 Optimization Report</h3>
+      <p style="color:var(--text-muted)">
+        AI recommendations and cost-saving actions.
+      </p>
+      <br>
+      <button class="btn" onclick="downloadPDF()">
+        Download PDF
+      </button>
+    </div>
+  </div>
+</div>
+<!-- load jsPDF as client-side fallback if server can't generate PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="module">
+  import { downloadCSV, downloadPDF } from '../scripts/download.js';
+  window.downloadCSV = downloadCSV; // expose function for existing onclick
+  window.downloadPDF = downloadPDF;
+</script>
+</body>
+</html>

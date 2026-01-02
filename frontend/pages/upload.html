@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VoltAI | Upload</title>
+  <link rel="stylesheet" href="../styles/theme.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+
+<div class="navbar">
+  <h1>⚡ VoltAI</h1>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="insights.html">Insights</a>
+    <a href="recommendations.html">Recommendations</a>
+    <a href="reports.html">Reports</a>
+  </div>
+</div>
+
+<div class="page">
+  <h2 class="page-title">Upload Energy Usage CSV</h2>
+
+  <div class="grid">
+    <div class="glass">
+      <h3>📁 Upload File</h3>
+      <p style="color:var(--text-muted)">
+        Upload monthly household energy consumption data
+        in CSV format.
+      </p>
+
+      <br>
+
+      <input id="fileInput" type="file" accept=".csv">
+
+      <br><br>
+
+      <button id="uploadBtn" class="btn">Upload CSV</button>
+
+      <div id="uploadStatus" style="margin-top:10px;color:var(--text-muted)"></div>
+
+      <script type="module">
+        import { uploadFile } from '../scripts/api.js';
+
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+          const input = document.getElementById('fileInput');
+          if (!input.files || !input.files[0]) {
+            document.getElementById('uploadStatus').textContent = 'Please select a CSV file.';
+            return;
+          }
+          document.getElementById('uploadStatus').textContent = 'Uploading...';
+          try {
+            const res = await uploadFile(input.files[0]);
+            if (res.error) {
+              document.getElementById('uploadStatus').textContent = 'Error: ' + (res.error || JSON.stringify(res));
+            } else {
+              const total = res.statistics.total_records ?? 'N/A';
+              const avg = (res.statistics.avg_units !== null && res.statistics.avg_units !== undefined) ? Number(res.statistics.avg_units).toFixed(2) : 'N/A';
+              document.getElementById('uploadStatus').textContent = `Uploaded. Records: ${total}. Avg kWh: ${avg}`;
+              const analyzeLink = document.createElement('a');
+              analyzeLink.href = 'dashboard.html';
+              analyzeLink.innerHTML = '<button class="btn" style="margin-left:10px">Analyze Energy Data</button>';
+              document.getElementById('uploadStatus').appendChild(analyzeLink);
+            }
+          } catch (err) {
+            document.getElementById('uploadStatus').textContent = 'Upload failed: ' + err.message;
+          }
+        });
+      </script>
+    </div>
+
+    <div class="glass">
+      <h3>ℹ️ CSV Format Guide</h3>
+      <p style="color:var(--text-muted)">
+        Ensure your CSV contains:
+      </p>
+      <ul style="color:var(--text-muted)">
+        <li>Month</li>
+        <li>Units_kWh</li>
+        <li>Avg_Daily_KWh</li>
+        <li>Peak_Usage_Hours</li>
+        <li>Cost</ul><li>
+      </ul>
+
+      <p style="color:var(--text-muted)">
+        Example:
+        <br>Jan, 320, 10.5, 8, 1200
+        <br>Feb, 340, 11.3, 9, 1360
+      </p>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

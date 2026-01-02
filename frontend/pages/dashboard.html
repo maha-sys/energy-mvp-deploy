@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VoltAI | Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="../styles/theme.css">
+  <link rel="stylesheet" href="../styles/layout.css">
+  <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+
+<div class="navbar">
+  <h1>⚡ VoltAI</h1>
+  <div class="nav-links">
+    <a href="../index.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="insights.html">Insights</a>
+    <a href="recommendations.html">Recommendations</a>
+    <a href="reports.html">Reports</a>
+  </div>
+</div>
+
+<div class="page">
+  <h2 class="page-title">Energy Dashboard</h2>
+
+  <div class="grid">
+    <div class="glass">Predicted Usage<br><b>450 kWh</b></div>
+    <div class="glass">Estimated Savings<br><b>15%</b></div>
+    <div class="glass">Efficiency Score<br><b>High</b></div>
+  </div>
+
+  <br>
+
+  <div class="glass">
+    <canvas id="energyChart"></canvas>
+  </div>
+
+  <br>
+
+  <div class="glass">
+    <h3>Quick Predict</h3>
+    <label>Month <input id="predMonth" value="Jan"></label>
+    <label>Avg Daily (kWh) <input id="predAvg" value="10"></label>
+    <label>Peak Hours <input id="predPeak" value="3"></label>
+    <button id="predictBtn" class="btn">Predict</button>
+    <div id="predictResult" style="margin-top:10px"></div>
+  </div>
+
+  <br>
+
+  <div class="glass" style="text-align:center">
+    <p>Explore deeper analysis and optimization actions</p>
+    <br>
+    <a href="insights.html"><button class="btn">View Insights</button></a>
+    <a href="recommendations.html">
+      <button class="btn" style="margin-left:10px">Optimization Tips</button>
+    </a>
+  </div>
+</div>
+
+<script type="module" src="../scripts/charts.js"></script>
+
+<script type="module">
+  import { predictUsage } from '../scripts/api.js';
+
+  document.getElementById('predictBtn').addEventListener('click', async () => {
+    const payload = {
+      Month: document.getElementById('predMonth').value,
+      Avg_Daily_KWh: parseFloat(document.getElementById('predAvg').value),
+      Peak_Usage_Hours: parseFloat(document.getElementById('predPeak').value)
+    };
+
+    document.getElementById('predictResult').textContent = 'Predicting...';
+    try {
+      const res = await predictUsage(payload);
+      if (res.error) document.getElementById('predictResult').textContent = 'Error: ' + res.error;
+      else document.getElementById('predictResult').textContent = `Predicted: ${res.predicted_units_kwh} kWh — Cost: ₹${res.estimated_cost}`;
+    } catch (e) {
+      document.getElementById('predictResult').textContent = 'Prediction failed: ' + e.message;
+    }
+  });
+</script>
+
+</body>
+</html>
