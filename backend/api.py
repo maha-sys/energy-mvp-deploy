@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
+
 from flask_cors import CORS
 import pandas as pd
 import numpy as np
@@ -10,8 +11,6 @@ from io import BytesIO
 # ensure project root is on sys.path so sibling packages (like model/) can be imported
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# hi i am maha 
-
 
 
 
@@ -19,7 +18,7 @@ import tensorflow as tf
 from optimization_engine import EnergyOptimizer
 from model.predict_usage import predict_with_cost
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static", static_url_path="")
 CORS(app)
 
 # Paths
@@ -41,21 +40,9 @@ except Exception as e:
     model = None
     print("Model not found or failed to load:", e)
 
-# Added now
-@app.route('/', methods=['GET'])
+@app.route("/")
 def home():
-    return jsonify({
-        "message": "Energy Optimization API is running",
-        "endpoints": {
-            "health": "/health",
-            "upload_csv": "/upload",
-            "predict": "/predict",
-            "optimize": "/optimize",
-            "analytics": "/analytics",
-            "recommendations": "/recommendations"
-        }
-    })
-# upto this
+    return send_from_directory(app.static_folder, "index.html")
 
 @app.route('/health', methods=['GET'])
 def health_check():
